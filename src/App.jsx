@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import FounderConnectModal from './FounderConnectModal';
 
 const fmt$ = (n) => `$${Math.round(n).toLocaleString()}`;
 const fieldStyle = { width:'100%', padding:'10px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:8, fontSize:13, color:'var(--text-primary)', boxSizing:'border-box' };
@@ -12,8 +13,28 @@ export default function App() {
   const [arVal, setArVal] = useState(2500000);
   const [dsoVal, setDsoVal] = useState(55);
   const [showDemoModal, setShowDemoModal] = useState(false);
+  const [showFounderModal, setShowFounderModal] = useState(false);
+  const [modalIntent, setModalIntent] = useState('demo');
   const [demoForm, setDemoForm] = useState({ company_name: '', work_email: '', phone: '', estimated_ar: '$1M - $5M', erp_system: 'QuickBooks Online' });
   const [demoSubmitted, setDemoSubmitted] = useState(false);
+
+  const isShowcase = typeof window !== 'undefined' && (
+    window.location.hostname.includes('github.io') ||
+    window.location.search.includes('mode=showcase')
+  );
+
+  const triggerAction = (e, intent = 'demo') => {
+    if (e && isShowcase) e.preventDefault();
+    if (isShowcase) {
+      setModalIntent(intent);
+      setShowFounderModal(true);
+    } else {
+      if (intent === 'signin' || intent === 'admin') {
+        return; // normal link behavior
+      }
+      setShowDemoModal(true);
+    }
+  };
 
   useEffect(() => {
     document.body.classList.toggle('dark-mode', theme === 'dark');
@@ -61,8 +82,8 @@ export default function App() {
             {theme === 'light' ? '🌙 Dark' : '☀️ Light'}
           </button>
 
-          <button onClick={() => setShowDemoModal(true)} style={{ padding:'8px 16px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:8, color:'var(--text-primary)', cursor:'pointer', fontWeight:600 }}>Book Demo</button>
-          <a href="https://app.businesspay.io" style={{ textDecoration:'none', padding:'8px 20px', background:'linear-gradient(135deg, #6366F1, #4F46E5)', borderRadius:8, color:'#fff', fontWeight:700, boxShadow:'0 4px 14px rgba(99,102,241,0.4)' }}>B2B Client Sign In →</a>
+          <button onClick={(e) => triggerAction(e, 'demo')} style={{ padding:'8px 16px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:8, color:'var(--text-primary)', cursor:'pointer', fontWeight:600 }}>Book Demo</button>
+          <a href="https://app.businesspay.io" onClick={(e) => isShowcase && triggerAction(e, 'signin')} style={{ textDecoration:'none', padding:'8px 20px', background:'linear-gradient(135deg, #6366F1, #4F46E5)', borderRadius:8, color:'#fff', fontWeight:700, boxShadow:'0 4px 14px rgba(99,102,241,0.4)' }}>B2B Client Sign In →</a>
         </div>
       </header>
 
@@ -78,10 +99,10 @@ export default function App() {
           BusinessPay connects directly to your ERP (QuickBooks, NetSuite, Xero, SAP) to rank overdue invoices by risk, automate dunning streams, and offer buyers self-serve early payment discounts.
         </p>
         <div style={{ display:'flex', gap:16, justifyContent:'center' }}>
-          <button onClick={() => setShowDemoModal(true)} style={{ padding:'14px 32px', background:'linear-gradient(135deg, #6366F1, #A855F7)', border:'none', borderRadius:12, color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer', boxShadow:'0 8px 25px rgba(99,102,241,0.4)' }}>
+          <button onClick={(e) => triggerAction(e, 'demo')} style={{ padding:'14px 32px', background:'linear-gradient(135deg, #6366F1, #A855F7)', border:'none', borderRadius:12, color:'#fff', fontSize:16, fontWeight:700, cursor:'pointer', boxShadow:'0 8px 25px rgba(99,102,241,0.4)' }}>
             Schedule Live Demo
           </button>
-          <a href="https://app.businesspay.io" style={{ textDecoration:'none', padding:'14px 28px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:12, color:'var(--text-primary)', fontSize:16, fontWeight:600 }}>
+          <a href="https://app.businesspay.io" onClick={(e) => isShowcase && triggerAction(e, 'signin')} style={{ textDecoration:'none', padding:'14px 28px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:12, color:'var(--text-primary)', fontSize:16, fontWeight:600 }}>
             Client AR Sign In →
           </a>
         </div>
@@ -135,7 +156,7 @@ export default function App() {
               <div style={{ fontSize:12, color:'var(--text-muted)', textTransform:'uppercase', letterSpacing:'0.06em', fontWeight:700 }}>Projected Accelerated Cash Flow</div>
               <div style={{ fontSize:38, fontWeight:900, color:'#059669', margin:'8px 0 4px', letterSpacing:'-0.02em' }}>{fmt$(acceleratedCash)}</div>
               <div style={{ fontSize:13, color:'#10B981', fontWeight:600, marginBottom:16 }}>~{daysSaved} Days DSO Reduction</div>
-              <button onClick={() => setShowDemoModal(true)} style={{ width:'100%', padding:'12px', background:'linear-gradient(135deg, #10B981, #059669)', border:'none', borderRadius:10, color:'#fff', fontWeight:700, cursor:'pointer' }}>Unlock This Cash Now</button>
+              <button onClick={(e) => triggerAction(e, 'demo')} style={{ width:'100%', padding:'12px', background:'linear-gradient(135deg, #10B981, #059669)', border:'none', borderRadius:10, color:'#fff', fontWeight:700, cursor:'pointer' }}>Unlock This Cash Now</button>
             </div>
           </div>
         </div>
@@ -177,7 +198,7 @@ export default function App() {
                   {p.feat.map(f => <li key={f} style={{ display:'flex', gap:8, alignItems:'center' }}><span style={{ color:'#10B981', fontWeight:700 }}>✓</span><span>{f}</span></li>)}
                 </ul>
               </div>
-              <button onClick={() => setShowDemoModal(true)} style={{
+              <button onClick={(e) => triggerAction(e, 'demo')} style={{
                 marginTop:28, width:'100%', padding:'12px', borderRadius:10, fontSize:14, fontWeight:700, cursor:'pointer',
                 background: p.popular ? 'linear-gradient(135deg, #6366F1, #4F46E5)' : 'var(--bg-main)',
                 color: p.popular ? '#fff' : 'var(--text-primary)', border: p.popular ? 'none' : '1px solid var(--border-color)'
@@ -191,7 +212,7 @@ export default function App() {
       <footer style={{ padding:'30px 40px', borderTop:'1px solid var(--border-color)', background:'var(--header-bg)', display:'flex', justifyContent:'space-between', alignItems:'center', fontSize:12, color:'var(--text-muted)' }}>
         <div>© 2026 BusinessPay, Inc. All rights reserved. B2B Accounts Receivable Automation Platform.</div>
         <div style={{ display:'flex', gap:20, alignItems:'center' }}>
-          <a href="https://app.businesspay.io/admin" style={{ color:'#6366F1', textDecoration:'none', fontWeight:600 }}>
+          <a href="https://app.businesspay.io/admin" onClick={(e) => isShowcase && triggerAction(e, 'admin')} style={{ color:'#6366F1', textDecoration:'none', fontWeight:600 }}>
             🔒 Corporate Admin Console (/admin)
           </a>
         </div>
@@ -237,6 +258,13 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Founder Connect Modal for Public Showcase */}
+      <FounderConnectModal
+        isOpen={showFounderModal}
+        onClose={() => setShowFounderModal(false)}
+        intent={modalIntent}
+      />
     </div>
   );
 }
