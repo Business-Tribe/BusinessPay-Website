@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import FounderConnectModal from './FounderConnectModal';
 
 const fmt$ = (n) => `$${Math.round(n).toLocaleString()}`;
-const fieldStyle = { width:'100%', padding:'10px', background:'var(--bg-card)', border:'1px solid var(--border-color)', borderRadius:8, fontSize:13, color:'var(--text-primary)', boxSizing:'border-box' };
+const fieldStyle = { width:'100%', padding:'10px', background:'var(--input-bg)', border:'1px solid var(--input-border)', borderRadius:8, fontSize:13, color:'var(--text-primary)', boxSizing:'border-box' };
 
 function Field({ label, children }) {
   return <div style={{ marginBottom:14 }}><label style={{ fontSize:12, color:'var(--text-secondary)', display:'block', marginBottom:6, fontWeight:600 }}>{label}</label>{children}</div>;
@@ -92,8 +92,24 @@ export default function App() {
         <div style={{ display:'inline-block', padding:'6px 16px', borderRadius:9999, background:'rgba(99,102,241,0.12)', border:'1px solid rgba(99,102,241,0.25)', color:'#6366F1', fontSize:13, fontWeight:700, marginBottom:20 }}>
           🚀 Next-Gen B2B AR &amp; Early Payment Liquidity Accelerator
         </div>
-        <h1 style={{ fontSize:52, fontWeight:900, letterSpacing:'-0.03em', lineHeight:1.15, marginBottom:24, background: theme === 'dark' ? 'linear-gradient(180deg, #FFFFFF, #94A3B8)' : 'linear-gradient(180deg, #0F172A, #334155)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent' }}>
-          Accelerate B2B Cash Flow with Automated AR Collections &amp; Smart Liquidity Offers
+        <h1 style={{
+          fontSize: 52,
+          fontWeight: 900,
+          letterSpacing: '-0.03em',
+          lineHeight: 1.15,
+          marginBottom: 24,
+          color: 'var(--text-primary)'
+        }}>
+          Accelerate B2B Cash Flow with{' '}
+          <span style={{
+            background: 'linear-gradient(135deg, #6366F1, #A855F7)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            display: 'inline-block'
+          }}>
+            Automated AR Collections
+          </span>{' '}
+          &amp; Smart Liquidity Offers
         </h1>
         <p style={{ fontSize:18, color:'var(--text-secondary)', maxWidth:780, margin:'0 auto 36px', lineHeight:1.6 }}>
           BusinessPay connects directly to your ERP (QuickBooks, NetSuite, Xero, SAP) to rank overdue invoices by risk, automate dunning streams, and offer buyers self-serve early payment discounts.
